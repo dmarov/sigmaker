@@ -1,12 +1,45 @@
 #include <sqlite3.h>
 #include "modules/sigmaker.h"
+#include "main.h"
 #include <iostream>
+#include <boost/program_options.hpp>
+
+namespace po = boost::program_options;
 
 int main(int argc, char **argv)
 {
-    SigMaker::appendRecord("../config.yml");
+    po::options_description desc("Supported options");
 
-    std::cout << SigMaker::getSignature("../config.yml") << std::endl;
+    desc.add_options()
+        ("help", "produce help message")
+        ("version,v", "print version")
+        ("config", po::value<std::string>(), "specify config");
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("version")) {
+        std::cout << "v" << sigmaker_VERSION_MAJOR << "." << sigmaker_VERSION_MINOR << "." << sigmaker_VERSION_PATCH << std::endl;
+        return 0;
+    }
+
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 0;
+    }
+
+    if (!vm.count("config")) {
+        std::cout << "specify config via --config option" << std::endl;
+        return 1;
+    }
+
+    auto config = vm["config"].as<std::string>();
+
+    std::cout << config << std::endl;
+    SigMaker::appendRecord(config);
+
+    std::cout << SigMaker::getSignature(config) << std::endl;
 
     return 0;
 }
