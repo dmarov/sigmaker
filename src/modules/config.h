@@ -14,7 +14,8 @@ private:
     unsigned int before;
     unsigned int after;
     std::string module_name;
-    std::vec<long int> offsets;
+    std::vector<long int> offsets;
+    unsigned int size;
 };
 
 #endif

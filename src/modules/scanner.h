@@ -9,7 +9,7 @@ class Scanner {
 public:
     Scanner(std::string window_name);
 
-    std::vec<char> readMemory(std::string moduleName, std::vec<char> pointer, int before, int after);
+    std::vector<char> readMemory(std::string module_name, std::vector<long int> offsets, int before, int after);
 
 private:
 };
