@@ -9,6 +9,9 @@ file(GLOB modules_src
 
 add_executable(sigmaker src/main.cpp ${modules_src})
 
+set_property(TARGET sigmaker PROPERTY
+  MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 find_package(yaml-cpp CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 
