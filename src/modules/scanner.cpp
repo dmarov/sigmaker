@@ -1,10 +1,8 @@
 #include "eventloop.h"
-#include "scanner.h"
 #include <iostream>
 
 int SigMaker::appendRecord(std::string path_to_config)
 {
-
     return 0
 }
 
