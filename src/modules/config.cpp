@@ -1,5 +1,6 @@
 #include "config.h"
 #include <iostream>
+#include <windows.h>
 #include <yaml-cpp/yaml.h>
 
 Config::Config(std::string path_to_file)
@@ -8,9 +9,22 @@ Config::Config(std::string path_to_file)
 
         YAML::Node config = YAML::LoadFile(path_to_file);
         this->module_name = config["module"].as<std::string>();
+        this->window_name = config["window"].as<std::string>();
         this->size = config["size"].as<unsigned int>();
         auto offsets = config["offsets"].as<std::vector<std::string>>();
-        this->offsets = std::vector<long int>();
+        this->offsets = std::vector<DWORD_PTR>();
+        this->before = 50;
+        this->after = 50;
+
+        if (config["before"]) {
+            this->before = config["before"].as<unsigned int>();
+        }
+
+        if (config["after"]) {
+            this->after = config["after"].as<unsigned int>();
+        }
+
+        std::cout << this->module_name << std::endl;
 
         for(auto offset : offsets)
         {
@@ -26,4 +40,10 @@ Config::Config(std::string path_to_file)
         std::cerr << "failed to parse config" << std::endl;
         throw e;
     }
+}
+
+
+std::string Config::getWindowName()
+{
+    return this->window_name;
 }

@@ -1,9 +1,15 @@
 #include "sigmaker.h"
+#include "config.h"
+#include "scanner.h"
 #include <iostream>
 
-int SigMaker::appendRecord(std::string path_to_config)
+void SigMaker::appendRecord(std::string path_to_config)
 {
-    return 0;
+    Config config(path_to_config);
+    Scanner scanner(config.getWindowName());
+
+    auto bytes = scanner.readMemory(config.module_name, config.offsets, config.before, config.after);
+
 }
 
 std::string SigMaker::getSignature(std::string path_to_config)
@@ -15,3 +21,4 @@ int SigMaker::resetSignature(std::string path_to_config)
 {
     return 0;
 }
+
