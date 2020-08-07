@@ -18,12 +18,19 @@ Scanner::Scanner(std::string window_name)
     }
 }
 
-char* Scanner::readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, int offset, unsigned int len)
+byte* Scanner::readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, int offset, unsigned int len)
 {
-    char* res = new char[len];
+    byte* res = new byte[len];
 
     DWORD_PTR base_addr = this->getModuleBaseAddr((TCHAR*)module_name.c_str());
     DWORD_PTR value_addr = this->getPointerAddr(base_addr, offsets);
+    DWORD_PTR start_ptr = value_addr + offset;
+
+    bool read = ReadProcessMemory(this->handle, (LPCVOID)(start_ptr), res, len, NULL);
+
+    if (!read) {
+        throw new std::exception("unable to read memory");
+    }
 
     return res;
 }
@@ -78,7 +85,6 @@ DWORD_PTR Scanner::getPointerAddr(DWORD_PTR base_addr, std::vector<DWORD_PTR> of
     for (auto offset : offsets)
     {
         result = base_addr + offset;
-        std::cout << std::hex << result << std::endl;
         bool read = ReadProcessMemory(this->handle, (LPCVOID)(result), &new_value, pointer_size, NULL);
 
         if (!read) {
