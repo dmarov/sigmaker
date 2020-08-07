@@ -47,3 +47,33 @@ std::string Config::getWindowName()
 {
     return this->window_name;
 }
+
+std::string Config::getSessionId()
+{
+    return this->session_id;
+}
+
+std::string Config::getModuleName()
+{
+    return this->module_name;
+}
+
+std::vector<DWORD_PTR> Config::getOffsets()
+{
+    return this->offsets;
+}
+
+unsigned int Config::getSize()
+{
+    return this->size;
+}
+
+unsigned int Config::getBefore()
+{
+    return this->before;
+}
+
+unsigned int Config::getAfter()
+{
+    return this->after;
+}

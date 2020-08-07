@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     auto config = vm["config"].as<std::string>();
 
     std::cout << config << std::endl;
-    SigMaker::appendRecord(config);
+    SigMaker::appendSample(config);
 
     std::cout << SigMaker::getSignature(config) << std::endl;
 

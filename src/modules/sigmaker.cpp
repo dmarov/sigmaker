@@ -3,13 +3,23 @@
 #include "scanner.h"
 #include <iostream>
 
-void SigMaker::appendRecord(std::string path_to_config)
+void SigMaker::appendSample(std::string path_to_config)
 {
     Config config(path_to_config);
     Scanner scanner(config.getWindowName());
 
-    auto bytes = scanner.readMemory(config.module_name, config.offsets, config.before, config.after);
+    auto bytes = scanner.readMemory(
+        config.getModuleName(),
+        config.getOffsets(),
+        config.getBefore(),
+        config.getAfter()
+    );
 
+    for (auto byte : bytes)
+    {
+        std::cout << std::hex << byte << " ";
+    }
+    std::cout << std::endl;
 }
 
 std::string SigMaker::getSignature(std::string path_to_config)

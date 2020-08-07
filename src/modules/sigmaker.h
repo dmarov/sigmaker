@@ -7,7 +7,7 @@ class SigMaker {
 
 public:
     // appends record in database for specified file
-    static void appendRecord(std::string path_to_config);
+    static void appendSample(std::string path_to_config);
 
     // generates signature based on database data
     static std::string getSignature(std::string path_to_config);

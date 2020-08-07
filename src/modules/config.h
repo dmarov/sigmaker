@@ -11,6 +11,12 @@ public:
     Config(std::string path_to_file);
 
     std::string getWindowName();
+    std::string getSessionId();
+    std::string getModuleName();
+    std::vector<DWORD_PTR> getOffsets();
+    unsigned int getSize();
+    unsigned int getBefore();
+    unsigned int getAfter();
 
 private:
     std::string session_id;

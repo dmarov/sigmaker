@@ -16,7 +16,7 @@ Scanner::Scanner(std::string window_name)
 
 std::vector<char> readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, int before, int after)
 {
-    std::vector<char> res;
+    auto res = new std::vector<char>();
 
     return res;
 }
@@ -56,7 +56,7 @@ DWORD_PTR Scanner::getModuleBaseAddr(TCHAR* moduleName)
     return moduleBaseAddr;
 }
 
-DWORD Scanner::getPointerAddr(DWORD_PTR baseAddr, std::vector<DWORD> offsets)
+DWORD Scanner::getPointerAddr(DWORD_PTR baseAddr, std::vector<DWORD_PTR> offsets)
 {
     DWORD_PTR result = baseAddr;
     DWORD_PTR newValue;
