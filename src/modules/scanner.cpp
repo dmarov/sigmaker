@@ -11,7 +11,7 @@ Scanner::Scanner(std::string window_name)
     this->window_name = window_name;
     this->window = FindWindowA(NULL, window_name.c_str());
     GetWindowThreadProcessId(this->window, &(this->pid));
-    this->handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, this->pid);
+    this->handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_QUERY_LIMITED_INFORMATION, FALSE, this->pid);
 
     if (this->handle == NULL) {
         throw new std::exception("unable to get process handle");
@@ -51,24 +51,37 @@ DWORD_PTR Scanner::getModuleBaseAddr(TCHAR* moduleName)
     return moduleBaseAddr;
 }
 
-DWORD_PTR Scanner::getPointerAddr(DWORD_PTR baseAddr, std::vector<DWORD_PTR> offsets)
+DWORD_PTR Scanner::getPointerAddr(DWORD_PTR base_addr, std::vector<DWORD_PTR> offsets)
 {
-    DWORD_PTR result = baseAddr;
-    DWORD_PTR new_value;
+
+    std::size_t pointer_size = sizeof(DWORD_PTR);
+
+    if (this->is32BitPointer()) {
+        pointer_size = sizeof(DWORD);
+    }
+
+    DWORD_PTR result = base_addr;
+    DWORD_PTR new_value = NULL;
 
     for (auto offset : offsets)
     {
-        result = baseAddr + offset;
+        result = base_addr + offset;
         std::cout << std::hex << result << std::endl;
-        bool read = ReadProcessMemory(this->handle, (LPCVOID)(result), &new_value, sizeof(new_value), NULL);
+        bool read = ReadProcessMemory(this->handle, (LPCVOID)(result), &new_value, pointer_size, NULL);
 
         if (!read) {
             throw new std::exception("unable to read memory");
         }
 
-        baseAddr = new_value;
+        base_addr = new_value;
     }
 
     return result;
+}
+
+bool Scanner::is32BitPointer()
+{
+    BOOL is_32_bit = false;
+    return IsWow64Process(this->handle, &is_32_bit) && is_32_bit;
 }
 

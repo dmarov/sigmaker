@@ -21,6 +21,7 @@ public:
 private:
     DWORD_PTR getModuleBaseAddr(TCHAR* moduleName);
     DWORD_PTR getPointerAddr(DWORD_PTR baseAddr, std::vector<DWORD_PTR> offsets);
+    bool is32BitPointer();
 };
 
 #endif
