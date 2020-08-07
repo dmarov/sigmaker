@@ -16,11 +16,11 @@ private:
 public:
     Scanner(std::string window_name);
 
-    std::vector<char> readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, unsigned int before, unsigned int after);
+    char* readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, int offset, unsigned int len);
 
 private:
     DWORD_PTR getModuleBaseAddr(TCHAR* moduleName);
-    DWORD getPointerAddr(DWORD_PTR baseAddr, std::vector<DWORD_PTR> offsets);
+    DWORD_PTR getPointerAddr(DWORD_PTR baseAddr, std::vector<DWORD_PTR> offsets);
 };
 
 #endif

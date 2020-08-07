@@ -11,13 +11,14 @@ void SigMaker::appendSample(std::string path_to_config)
     auto bytes = scanner.readMemory(
         config.getModuleName(),
         config.getOffsets(),
-        config.getBefore(),
-        config.getAfter()
+        config.getOffset(),
+        config.getLength()
     );
 
-    for (auto byte : bytes)
+    std::cout << config.getLength() << std::endl;
+    for (unsigned i = 0; i < config.getLength(); ++i)
     {
-        std::cout << std::hex << byte << " ";
+        std::cout << std::hex << bytes[i] << " ";
     }
     std::cout << std::endl;
 }

@@ -13,15 +13,15 @@ Config::Config(std::string path_to_file)
         this->size = config["size"].as<unsigned int>();
         auto offsets = config["offsets"].as<std::vector<std::string>>();
         this->offsets = std::vector<DWORD_PTR>();
-        this->before = 50;
-        this->after = 50;
+        this->offset = -50;
+        this->len = 100;
 
-        if (config["before"]) {
-            this->before = config["before"].as<unsigned int>();
+        if (config["offset"]) {
+            this->offset = config["offset"].as<unsigned int>();
         }
 
-        if (config["after"]) {
-            this->after = config["after"].as<unsigned int>();
+        if (config["length"]) {
+            this->len = config["length"].as<unsigned int>();
         }
 
         std::cout << this->module_name << std::endl;
@@ -68,12 +68,12 @@ unsigned int Config::getSize()
     return this->size;
 }
 
-unsigned int Config::getBefore()
+int Config::getOffset()
 {
-    return this->before;
+    return this->offset;
 }
 
-unsigned int Config::getAfter()
+unsigned int Config::getLength()
 {
-    return this->after;
+    return this->len;
 }

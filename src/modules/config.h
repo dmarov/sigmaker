@@ -15,8 +15,8 @@ public:
     std::string getModuleName();
     std::vector<DWORD_PTR> getOffsets();
     unsigned int getSize();
-    unsigned int getBefore();
-    unsigned int getAfter();
+    int getOffset();
+    unsigned int getLength();
 
 private:
     std::string session_id;
@@ -24,8 +24,8 @@ private:
     std::string module_name;
     std::vector<DWORD_PTR> offsets;
     unsigned int size;
-    unsigned int before;
-    unsigned int after;
+    int offset;
+    unsigned int len;
 };
 
 #endif

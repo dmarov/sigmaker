@@ -12,14 +12,18 @@ Scanner::Scanner(std::string window_name)
     this->window = FindWindowA(NULL, window_name.c_str());
     GetWindowThreadProcessId(this->window, &(this->pid));
     this->handle = OpenProcess(PROCESS_VM_READ, FALSE, this->pid);
+
+    if (this->handle == NULL) {
+        throw new std::exception("unable to get process handle");
+    }
 }
 
-std::vector<char> Scanner::readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, unsigned int before, unsigned int after)
+char* Scanner::readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, int offset, unsigned int len)
 {
-    std::vector<char> res;
+    char* res = new char[len];
 
-    DWODR_PTR base_addr = this->getModuleBaseAddr(module_name.c_str());
-    DWORD_PTR = this->getPointerAddr(base_addr, offsets);
+    DWORD_PTR base_addr = this->getModuleBaseAddr((TCHAR*)module_name.c_str());
+    /* DWORD_PTR value_addr = this->getPointerAddr(base_addr, offsets); */
 
     return res;
 }
