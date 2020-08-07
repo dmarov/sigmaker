@@ -28,27 +28,39 @@ char* Scanner::readMemory(std::string module_name, std::vector<DWORD_PTR> offset
     return res;
 }
 
-DWORD_PTR Scanner::getModuleBaseAddr(TCHAR* moduleName)
+DWORD_PTR Scanner::getModuleBaseAddr(TCHAR* module_name)
 {
-    DWORD_PTR moduleBaseAddr = NULL;
-    DWORD bytesRequired;
+    DWORD_PTR module_base_addr = NULL;
+    DWORD bytes_required;
     HMODULE modules[1024];
 
-    bool success = EnumProcessModules(this->handle, modules, sizeof(modules), &bytesRequired);
+    bool success = EnumProcessModules(this->handle, modules, sizeof(modules), &bytes_required);
 
     if (!success) {
         throw std::exception("unable to scan for modules");
     }
 
-    unsigned int moduleCount = bytesRequired / sizeof(HMODULE);
+    unsigned int modules_count = bytes_required / sizeof(HMODULE);
 
-    moduleBaseAddr = (DWORD_PTR)modules[0];
+    for (unsigned i = 0; i < modules_count; ++i)
+    {
+        TCHAR module_name_buf[MAX_PATH];
+        DWORD name_size = sizeof(module_name_buf) / sizeof(TCHAR);
 
-    if (moduleBaseAddr == NULL) {
+        if (GetModuleBaseNameA(this->handle, modules[i], module_name_buf, name_size))
+        {
+            if (_tcscmp(module_name_buf, module_name) == 0)
+            {
+                module_base_addr = (DWORD_PTR)modules[i];
+            }
+        }
+    }
+
+    if (module_base_addr == NULL) {
         throw std::exception("unable to find module");
     }
 
-    return moduleBaseAddr;
+    return module_base_addr;
 }
 
 DWORD_PTR Scanner::getPointerAddr(DWORD_PTR base_addr, std::vector<DWORD_PTR> offsets)

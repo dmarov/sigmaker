@@ -24,8 +24,6 @@ Config::Config(std::string path_to_file)
             this->len = config["length"].as<unsigned int>();
         }
 
-        std::cout << this->module_name << std::endl;
-
         for(auto offset : offsets)
         {
             unsigned long offset_int;
