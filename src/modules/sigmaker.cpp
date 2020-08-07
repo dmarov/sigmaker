@@ -15,12 +15,11 @@ void SigMaker::appendSample(std::string path_to_config)
         config.getLength()
     );
 
-    std::cout << config.getLength() << std::endl;
-    for (unsigned i = 0; i < config.getLength(); ++i)
-    {
-        std::cout << std::hex << bytes[i] << " ";
-    }
-    std::cout << std::endl;
+    /* for (unsigned i = 0; i < config.getLength(); ++i) */
+    /* { */
+    /*     std::cout << std::hex << bytes[i] << " "; */
+    /* } */
+    /* std::cout << std::endl; */
 }
 
 std::string SigMaker::getSignature(std::string path_to_config)
