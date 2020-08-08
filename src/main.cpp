@@ -51,9 +51,9 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    if (command.compare("sig") == 0)
+    if (command.compare("generate") == 0)
     {
-        std::cout << SigMaker::getSignature(config) << std::endl;
+        std::cout << SigMaker::generateSignature(config) << std::endl;
         return 0;
     }
 

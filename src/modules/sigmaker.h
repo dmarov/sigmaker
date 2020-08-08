@@ -10,7 +10,7 @@ public:
     static void appendSample(std::string path_to_config);
 
     // generates signature based on database data
-    static std::string getSignature(std::string path_to_config);
+    static std::string generateSignature(std::string path_to_config);
 
     // deletes all records related to config
     static int resetSignature(std::string path_to_config);

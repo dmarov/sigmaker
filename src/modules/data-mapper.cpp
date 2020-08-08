@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <filesystem>
 #include <sqlite3.h>
+#include <vector>
 
 DataMapper::DataMapper() throw(std::exception)
 {
@@ -25,7 +26,8 @@ DataMapper::DataMapper() throw(std::exception)
           "bytes      BLOB NOT NULL," \
           "length     INTEGER NOT NULL," \
           "offset     INTEGER NOT NULL," \
-          "size       INTEGER NOT NULL" \
+          "size       INTEGER NOT NULL," \
+          "UNIQUE(file_hash, bytes)" \
     ");";
 
     int rc;
@@ -55,7 +57,6 @@ void DataMapper::appendSample(std::string file_hash, std::byte* bytes, unsigned 
         throw new std::exception("unable to prepare statement");
     }
 
-    std::cout << file_hash << std::endl;
     sqlite3_bind_text(statement, 1, file_hash.c_str(), file_hash.length(), NULL);
     sqlite3_bind_blob(statement, 2, bytes, len, SQLITE_STATIC);
     sqlite3_bind_int(statement, 3, len);
@@ -66,10 +67,45 @@ void DataMapper::appendSample(std::string file_hash, std::byte* bytes, unsigned 
 
     if (rc != SQLITE_DONE)
     {
-        throw new std::exception("unable to insert sample");
+        std::cerr << sqlite3_errmsg(this->handle) << std::endl;
     }
 
     sqlite3_finalize(statement);
+}
+
+std::vector<std::byte*> DataMapper::selectSamples(std::string file_hash)
+{
+
+    std::vector<std::byte*> res;
+    int rc;
+    sqlite3_stmt* statement = NULL;
+
+    rc = sqlite3_prepare_v2(
+        this->handle,
+        "SELECT (bytes) FROM sample WHERE file_hash = ?",
+        -1,
+        &statement,
+        NULL
+    );
+
+    if (rc != SQLITE_OK)
+    {
+        throw new std::exception("unable to select prepare samples");
+    }
+
+    sqlite3_bind_text(statement, 1, file_hash.c_str(), file_hash.length(), NULL);
+
+    while(sqlite3_step(statement) == SQLITE_ROW)
+    {
+        std::byte* bytes = new std::byte[len];
+
+        auto res_ptr = (std::byte*)sqlite_column_blob(statement, 0);
+
+        std::memcpy(bytes, res_ptr, len);
+        res.push_back(bytes);
+    }
+
+    return res;
 }
 
 DataMapper::~DataMapper()

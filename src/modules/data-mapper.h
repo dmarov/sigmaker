@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sqlite3.h>
+#include <vector>
 
 class DataMapper {
 
@@ -13,6 +14,7 @@ public:
     DataMapper() throw(std::exception);
 
     void appendSample(std::string id, std::byte* bytes, unsigned len, int offset, unsigned size) throw(std::exception);
+    std::vector<std::byte*> selectSamples(std::string session_id);
 
     ~DataMapper();
 private:
