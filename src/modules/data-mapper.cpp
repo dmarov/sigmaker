@@ -20,12 +20,12 @@ DataMapper::DataMapper() throw(std::exception)
     sqlite3_open(uri.c_str(), &this->handle);
 
     char* sql = "CREATE TABLE IF NOT EXISTS samples("  \
-          "id         INT PRIMARY KEY," \
-          "file_hash  CHAR[60] NOT NULL," \
+          "id         INTEGER PRIMARY KEY AUTOINCREMENT," \
+          "file_hash  CHARACTER(32) NOT NULL," \
           "bytes      BLOB NOT NULL," \
-          "length     INT NOT NULL," \
-          "offset     INT NOT NULL," \
-          "size       INT NOT NULL" \
+          "length     INTEGER NOT NULL," \
+          "offset     INTEGER NOT NULL," \
+          "size       INTEGER NOT NULL" \
     ");";
 
     int rc;
