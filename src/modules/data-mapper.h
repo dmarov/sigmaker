@@ -10,9 +10,9 @@ private:
     sqlite3 *handle;
 
 public:
-    DataMapper();
+    DataMapper() throw(std::exception);
 
-    void appendSample(std::string id, std::byte* bytes, unsigned len, int offset, unsigned size);
+    void appendSample(std::string id, std::byte* bytes, unsigned len, int offset, unsigned size) throw(std::exception);
 
     ~DataMapper();
 private:
