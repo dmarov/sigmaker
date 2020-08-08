@@ -14,18 +14,18 @@ public:
     std::string getSessionId();
     std::string getModuleName();
     std::vector<DWORD_PTR> getOffsets();
-    unsigned int getSize();
+    unsigned getSize();
     int getOffset();
-    unsigned int getLength();
+    unsigned getLength();
 
 private:
     std::string session_id;
     std::string window_name;
     std::string module_name;
     std::vector<DWORD_PTR> offsets;
-    unsigned int size;
+    unsigned size;
     int offset;
-    unsigned int len;
+    unsigned len;
 };
 
 #endif

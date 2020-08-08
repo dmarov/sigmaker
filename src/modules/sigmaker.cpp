@@ -1,26 +1,27 @@
 #include "sigmaker.h"
 #include "config.h"
 #include "scanner.h"
-#include <iostream>
+#include "data-mapper.h"
 
 void SigMaker::appendSample(std::string path_to_config)
 {
     Config config(path_to_config);
     Scanner scanner(config.getWindowName());
 
-    auto bytes = scanner.readMemory(
+    auto len = config.getLength();
+    auto offset = config.getOffset();
+
+    std::byte* bytes = scanner.readMemory(
         config.getModuleName(),
         config.getOffsets(),
-        config.getOffset(),
-        config.getLength()
+        offset,
+        len
     );
 
-    for (unsigned i = 0; i < config.getLength(); ++i)
-    {
-        std::cout << std::hex << (int) bytes[i] << " ";
-    }
+    DataMapper mapper(path_to_config);
+    mapper.appendSample(config.getSessionId(), bytes, len, offset, config.getSize());
 
-    std::cout << std::endl;
+    delete [] bytes;
 }
 
 std::string SigMaker::getSignature(std::string path_to_config)

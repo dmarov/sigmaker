@@ -16,7 +16,7 @@ private:
 public:
     Scanner(std::string window_name);
 
-    byte* readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, int offset, unsigned int len);
+    std::byte* readMemory(std::string module_name, std::vector<DWORD_PTR> offsets, int offset, unsigned int len);
 
 private:
     DWORD_PTR getModuleBaseAddr(TCHAR* moduleName);
