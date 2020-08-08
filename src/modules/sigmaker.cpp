@@ -4,6 +4,8 @@
 #include "data-mapper.h"
 #include <sstream>
 #include <iomanip>
+#include <iostream>
+#include <boost/algorithm/string.hpp>
 
 void SigMaker::appendSample(std::string path_to_config)
 {
@@ -41,9 +43,19 @@ std::string SigMaker::generateSignature(std::string path_to_config)
 
     std::vector<std::byte*>::iterator it = samples.begin();
 
+
     if (it == samples.end())
     {
-        return std::string("");
+        std::string result;
+
+        for (unsigned i = 0; i < len; ++i)
+        {
+            result += "?? ";
+        }
+
+        boost::trim_right(result);
+
+        return result;
     }
 
     std::byte* ptr = *it;
@@ -54,32 +66,31 @@ std::string SigMaker::generateSignature(std::string path_to_config)
         {
             if (result_bytes[i] == (std::byte)0x00)
             {
-                result_bytes[i] |= ptr[i] ^ *it[i];
+                result_bytes[i] |= ptr[i] ^ (*it)[i];
             }
         }
 
-        std::next(it);
+        ++it;
     }
 
-    std::string result;
 
     std::stringstream ss;
-
-    ss << std::hex << std::setw(2) << std::setfill('0');
 
     for (unsigned i = 0; i < len; ++i)
     {
         if (result_bytes[i] == (std::byte)0x00)
         {
-            ss << (unsigned)ptr[i];
+            ss << std::hex << std::setw(2) << std::setfill('0') << (unsigned)ptr[i] << " ";
         }
         else
         {
-            ss << "??";
+            ss << "?? ";
         }
+
     }
 
-    ss >> result;
+    std::string result = ss.str();
+    boost::trim_right(result);
 
     return result;
 }

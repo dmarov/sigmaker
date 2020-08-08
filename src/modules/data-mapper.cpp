@@ -78,11 +78,11 @@ std::vector<std::byte*> DataMapper::selectSamples(std::string file_hash, unsigne
 {
     std::vector<std::byte*> res;
     int rc;
-    sqlite3_stmt* statement = NULL;
+    sqlite3_stmt* statement;
 
     rc = sqlite3_prepare_v2(
         this->handle,
-        "SELECT (bytes) FROM sample WHERE file_hash = ?",
+        "SELECT (bytes) FROM samples WHERE file_hash = ?",
         -1,
         &statement,
         NULL
