@@ -33,6 +33,8 @@ std::string SigMaker::generateSignature(std::string path_to_config)
     DataMapper mapper;
     auto samples = mapper.selectSamples(config.getSessionId(), config.getLength());
     auto len = config.getLength();
+    auto offset = config.getOffset();
+    auto size = config.getSize();
 
     std::byte* result_bytes = new std::byte[len];
 
@@ -50,7 +52,14 @@ std::string SigMaker::generateSignature(std::string path_to_config)
 
         for (unsigned i = 0; i < len; ++i)
         {
-            result += "?? ";
+            if (i >= -offset && i < -offset + size)
+            {
+                result += "xx ";
+            }
+            else
+            {
+                result += "?? ";
+            }
         }
 
         boost::trim_right(result);
@@ -84,9 +93,15 @@ std::string SigMaker::generateSignature(std::string path_to_config)
         }
         else
         {
-            ss << "?? ";
+            if (i >= -offset && i < -offset + size)
+            {
+                ss << "xx ";
+            }
+            else
+            {
+                ss << "?? ";
+            }
         }
-
     }
 
     std::string result = ss.str();
