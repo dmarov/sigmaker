@@ -18,10 +18,9 @@ void SigMaker::appendSample(std::string path_to_config)
         len
     );
 
-    DataMapper mapper(path_to_config);
-    mapper.appendSample(config.getSessionId(), bytes, len, offset, config.getSize());
+    DataMapper mapper;
+    /* mapper.appendSample(config.getSessionId(), bytes, len, offset, config.getSize()); */
 
-    delete [] bytes;
 }
 
 std::string SigMaker::getSignature(std::string path_to_config)

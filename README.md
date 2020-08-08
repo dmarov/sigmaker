@@ -4,10 +4,11 @@ creates AOB signatures from multilevel pointers
 
 .\sigmaker.exe --config config.yml
 
-```
 config.yml
 
+```
 module: witcher.exe
+window: The Witcher (1.4.5.1304)
 offsets:
   - 00DC09E4
   - 29C
@@ -16,6 +17,8 @@ offsets:
   - 0
   - 58
 size: 4
+offset: -30
+length: 60
 ```
 
 ## Build

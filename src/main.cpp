@@ -13,7 +13,8 @@ int main(int argc, char **argv)
     desc.add_options()
         ("help", "produce help message")
         ("version,v", "print version")
-        ("config", po::value<std::string>(), "specify config");
+        ("config", po::value<std::string>(), "specify config")
+        ("command", po::value<std::string>(), "specify command");
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -36,10 +37,25 @@ int main(int argc, char **argv)
 
     auto config = vm["config"].as<std::string>();
 
-    std::cout << config << std::endl;
-    SigMaker::appendSample(config);
+    if (!vm.count("command"))
+    {
+        std::cout << "specify command via --command option" << std::endl;
+        return 1;
+    }
 
-    std::cout << SigMaker::getSignature(config) << std::endl;
+    auto command = vm["command"].as<std::string>();
+
+    if (command.compare("append") == 0)
+    {
+        SigMaker::appendSample(config);
+        return 0;
+    }
+
+    if (command.compare("sig") == 0)
+    {
+        std::cout << SigMaker::getSignature(config) << std::endl;
+        return 0;
+    }
 
     return 0;
 }
