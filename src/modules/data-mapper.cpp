@@ -1,4 +1,5 @@
 #include "data-mapper.h"
+#include "config.h"
 #include <iostream>
 #include <stdlib.h>
 #include <filesystem>
@@ -73,9 +74,8 @@ void DataMapper::appendSample(std::string file_hash, std::byte* bytes, unsigned 
     sqlite3_finalize(statement);
 }
 
-std::vector<std::byte*> DataMapper::selectSamples(std::string file_hash)
+std::vector<std::byte*> DataMapper::selectSamples(std::string file_hash, unsigned len)
 {
-
     std::vector<std::byte*> res;
     int rc;
     sqlite3_stmt* statement = NULL;
@@ -99,7 +99,7 @@ std::vector<std::byte*> DataMapper::selectSamples(std::string file_hash)
     {
         std::byte* bytes = new std::byte[len];
 
-        auto res_ptr = (std::byte*)sqlite_column_blob(statement, 0);
+        auto res_ptr = (std::byte*)sqlite3_column_blob(statement, 0);
 
         std::memcpy(bytes, res_ptr, len);
         res.push_back(bytes);

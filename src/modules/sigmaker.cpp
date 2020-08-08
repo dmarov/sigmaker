@@ -3,6 +3,7 @@
 #include "scanner.h"
 #include "data-mapper.h"
 #include <sstream>
+#include <iomanip>
 
 void SigMaker::appendSample(std::string path_to_config)
 {
@@ -28,36 +29,36 @@ std::string SigMaker::generateSignature(std::string path_to_config)
     Config config(path_to_config);
 
     DataMapper mapper;
-    auto samples = mapper.selectSamples(config.getSessionId());
+    auto samples = mapper.selectSamples(config.getSessionId(), config.getLength());
     auto len = config.getLength();
 
     std::byte* result_bytes = new std::byte[len];
 
     for (unsigned i = 0; i < len; ++i)
     {
-        result_bytes[i] = 0x00;
+        result_bytes[i] = (std::byte)0x00;
     }
 
     std::vector<std::byte*>::iterator it = samples.begin();
 
-    if (*it == samples.end())
+    if (it == samples.end())
     {
         return std::string("");
     }
 
     std::byte* ptr = *it;
 
-    while (*it != samples.end())
+    while (it != samples.end())
     {
         for (unsigned i = 0; i < len; ++i)
         {
-            if (result_bytes[i] == 0x00)
+            if (result_bytes[i] == (std::byte)0x00)
             {
-                result_bytes[i] ||= (ptr[i] || *it[i]) && !(ptr[i] && *it[i]); // this is xor
+                result_bytes[i] |= ptr[i] ^ *it[i];
             }
         }
 
-        it.next();
+        std::next(it);
     }
 
     std::string result;
@@ -68,9 +69,9 @@ std::string SigMaker::generateSignature(std::string path_to_config)
 
     for (unsigned i = 0; i < len; ++i)
     {
-        if (result_bytes[i] == 0x00)
+        if (result_bytes[i] == (std::byte)0x00)
         {
-            ss << ptr[i];
+            ss << (unsigned)ptr[i];
         }
         else
         {
