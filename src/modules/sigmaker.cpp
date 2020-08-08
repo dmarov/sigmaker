@@ -84,12 +84,13 @@ std::string SigMaker::generateSignature(std::string path_to_config)
 
 
     std::stringstream ss;
+    ss << std::hex << std::uppercase;
 
     for (unsigned i = 0; i < len; ++i)
     {
         if (result_bytes[i] == (std::byte)0x00)
         {
-            ss << std::hex << std::setw(2) << std::setfill('0') << (unsigned)ptr[i] << " ";
+            ss << std::setw(2) << std::setfill('0') << (unsigned)ptr[i] << " ";
         }
         else
         {
