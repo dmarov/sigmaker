@@ -29,5 +29,5 @@ git clone https://github.com/microsoft/vcpkg
 .\vcpkg\vcpkg.exe install boost:x64-windows-static sqlite3:x64-windows-static yaml-cpp:x64-windows-static
 mkdir build
 cd build
-..\build-msvc-x64-static.bat
+..\build-ninja-msvc-x64-static.bat
 ```
