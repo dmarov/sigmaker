@@ -54,7 +54,7 @@ std::string SigMaker::generateSignature(std::string path_to_config)
         {
             if (i >= -offset && i < -offset + size)
             {
-                result += "xx ";
+                result += "?? ";
             }
             else
             {
@@ -96,7 +96,7 @@ std::string SigMaker::generateSignature(std::string path_to_config)
         {
             if (i >= -offset && i < -offset + size)
             {
-                ss << "xx ";
+                ss << "?? ";
             }
             else
             {

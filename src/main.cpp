@@ -1,3 +1,4 @@
+#include <locale>
 #include <sqlite3.h>
 #include "modules/sigmaker.h"
 #include "main.h"
@@ -5,6 +6,7 @@
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
+
 
 int main(int argc, char **argv)
 {
